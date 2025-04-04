@@ -4,7 +4,9 @@ main=Blueprint('main',__name__)
 
 
 # Inicio de sesión
-usuarios={'autoevaluacion_fcabog@unal.edu.co':'fcaxauto345*'}
+usuarios={'autoevaluacion_fcabog@unal.edu.co':'fcaxauto345*',
+          'superadmin':'jorge123',
+          'mariacarolina2025':'mc123'}
 def iniciar_sesion(email, password):
     if email in usuarios and usuarios[email] == password:
         print("✅ Inicio de sesión exitoso.")
