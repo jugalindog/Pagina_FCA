@@ -1,0 +1,34 @@
+/* General Styling */
+h1,
+h2,
+h4,
+p {
+  font-family: "Arvo", serif;
+}
+
+p {
+  font-size: 17px;
+}
+
+/* Introduction Section */
+#intro {
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+}
+
+.label-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que se ajusten si no hay espacio */
+  gap: 10px; /* Espacio entre los labels */
+  justify-content: left; /* Centra los labels */
+  align-items: center;
+}
+
+.label-container label {
+  margin-right: 10px; /* Espacio entre labels */
+}
+
+
+
