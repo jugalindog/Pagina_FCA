@@ -5,8 +5,7 @@ main=Blueprint('main',__name__)
 
 # Inicio de sesión
 usuarios={'autoevaluacion_fcabog@unal.edu.co':'fcaxauto345*',
-          'superadmin':'jorge123',
-          'mariacarolina2025':'mc123'}
+          'superadmin':'jorge123'}
 def iniciar_sesion(email, password):
     if email in usuarios and usuarios[email] == password:
         print("✅ Inicio de sesión exitoso.")
@@ -43,6 +42,10 @@ def secretaria():
 @main.route('/curricular')
 def curricular():
     return render_template('curricular.html')
+# Interfaz de normatividad
+@main.route('/normatividad')
+def normatividad():
+    return render_template('normatividad.html')
 
 ######            ########
 ###### SECRETARIA ########
