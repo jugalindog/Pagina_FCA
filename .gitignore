@@ -1,0 +1,21 @@
+# Ignorar archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+env/
+venv/
+
+# Archivos ocultos y temporales
+.DS_Store
+*.swp
+*.swo
+
+# Configuraciones locales
+instance/
+.env
+
+# Archivos generados por PowerBI o similares (si aplican)
+*.pbix
