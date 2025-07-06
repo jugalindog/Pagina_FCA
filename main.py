@@ -1,4 +1,6 @@
 from flask import Blueprint, Flask,render_template,request,redirect, url_for, flash
+from flask import session
+
 
 main=Blueprint('main',__name__)
 
@@ -32,6 +34,12 @@ def index():
 def UI():
     return render_template('PrincipalInterface.html')
 
+
+#Desconexión
+@main.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('main.index'))
 
 
 # Interfaz de secretaria

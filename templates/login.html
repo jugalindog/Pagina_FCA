@@ -2,12 +2,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='extended_beauty.css') }}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
+
+    
     /* General styling */
     body {
       margin: 0;
       padding: 0;
       font-family: "Poppins", sans-serif;
-      background: #7ae719;
+      background: #555555;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -27,9 +29,12 @@
     /* Image styling */
     .image-container img {
       width: 100%;
-      max-width: 300px;
+      max-width: 900px;
       height: auto;
+      margin-left: 30px;
+      margin-right: auto;
       margin-bottom: 15px;
+      display: block;
     }
 
     /* Title styling */
@@ -108,7 +113,7 @@
 
 <div class="container">
   <div class="image-container">
-    <img src="{{ url_for('static', filename='/images/logoFCA.ico') }}" alt="Logo">
+    <img src="{{ url_for('static', filename='/images/fac-ciencias.png') }}" alt="Logo">
   </div>
   <div class="text-container">
     Interfaz de Estadísticas y Visualizaciones

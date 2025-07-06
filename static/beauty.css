@@ -1,3 +1,15 @@
 * {
     font-family: "Arvo", serif;
   }
+
+  .btn-hover-green {
+  color: white;
+  border-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-hover-green:hover {
+  background-color: #28a745;  /* Verde Bootstrap */
+  color: white;
+  border-color: #28a745;
+}

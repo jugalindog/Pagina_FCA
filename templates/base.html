@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,6 +25,7 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="{{ url_for('static', filename='beauty.css') }}">
 
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -45,9 +47,45 @@
     {% endblock %}
   </head>
 
+
+   
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    let timer;
+    const tiempoMaxInactivo = 15 * 60 * 1000; // 15 minutos
+
+    function reiniciarTemporizador() {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        Swal.fire({
+          title: 'Sesión expirada por inactividad',
+          text: 'Serás redirigido al inicio de sesión.',
+          icon: 'warning',
+          confirmButtonText: 'Aceptar',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          didClose: () => {
+            window.location.href = "{{ url_for('main.index') }}";  // Puedes usar main.index si no deseas cerrar sesión
+          }
+        });
+      }, tiempoMaxInactivo);
+    }
+
+   // Eventos que reinician el temporizador
+   window.onload = reiniciarTemporizador;
+   document.onmousemove = reiniciarTemporizador;
+   document.onkeypress = reiniciarTemporizador;
+   document.onclick = reiniciarTemporizador;
+   document.onscroll = reiniciarTemporizador;
+  </script>
+
+
+  
+
   <body>
-    <nav class="navbar navbar-dark" style="background-color: #7ae719;">
-      <a class="navbar-brand" href="{{ url_for('main.index') }}"
+    <nav class="navbar navbar-dark" style="background-color: #555555;">
+      <a class="navbar-brand" href="{{ url_for('main.UI') }}"
         >Datos y Estadísticas - FCA UNAL</a
       >
       <button
@@ -63,35 +101,20 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <div class="label-container">
-          <li class="nav-item active">
-            <a
-              href="{{ url_for('main.secretaria') }}"
-              class="btn btn-outline-secondary"
-              role="button"
-              style="margin-left: 150px;"
-              >Datos Secretaria</a
-            >
+         <ul class="navbar-nav d-flex flex-row justify-content-between w-100" style="gap: 1rem;padding: 0 5rem;">
+          <li class="nav-item">
+            <a href="{{ url_for('main.secretaria') }}" class="btn btn-outline-secondary btn-hover-green text-white" style="--bs-btn-hover-bg: #28a745;">Datos Secretaría</a>
           </li>
-          <li class="nav-item active">
-            <a
-              href="{{ url_for('main.curricular') }}"
-              class="btn btn-outline-secondary"
-              role="button"
-              style="margin-left: 150px;"
-              >Datos Curricular</a
-            >
+          <li class="nav-item">
+            <a href="{{ url_for('main.curricular') }}" class="btn btn-outline-secondary btn-hover-green text-white">Datos Curricular</a>
           </li>
-          <li class="nav-item active">
-            <a
-              href="{{ url_for('main.normatividad') }}"
-              class="btn btn-outline-secondary"
-              role="button"
-              style="margin-left: 150px;"
-              >Normatividad</a
-            >
+          <li class="nav-item">
+            <a href="{{ url_for('main.normatividad') }}" class="btn btn-outline-secondary btn-hover-green text-white">Normatividad</a>
           </li>
+          <li class="nav-item">
+           <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger"> Cerrar sesión</a>
+          </li>
+        </ul>
       </div>
     </nav>
     {% block content %} {% endblock %}
