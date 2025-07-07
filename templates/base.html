@@ -52,7 +52,7 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     let timer;
-    const tiempoMaxInactivo = 15 * 60 * 1000; // 15 minutos
+    const tiempoMaxInactivo = 1 * 60 * 1000; // 15 minutos
 
     function reiniciarTemporizador() {
       clearTimeout(timer);
@@ -66,7 +66,7 @@
           allowEscapeKey: false,
           allowEnterKey: false,
           didClose: () => {
-            window.location.href = "{{ url_for('main.index') }}";  // Puedes usar main.index si no deseas cerrar sesión
+            window.location.href = "{{ url_for('main.logout') }}";  // Puedes usar main.index si no deseas cerrar sesión
           }
         });
       }, tiempoMaxInactivo);
@@ -79,6 +79,12 @@
    document.onclick = reiniciarTemporizador;
    document.onscroll = reiniciarTemporizador;
   </script>
+
+<script>
+  if (performance.navigation.type === 2) {
+    location.reload(true); // recarga desde el servidor (no desde caché)
+  }
+</script>
 
 
   
