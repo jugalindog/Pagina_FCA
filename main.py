@@ -20,7 +20,7 @@ def login_required(f):
 
 # Inicio de sesión
 usuarios={'autoevaluacion_fcabog@unal.edu.co':'fcaxauto345*',
-          'superadmin':'jorge123'}
+        'superadmin':'jorge123'}
 def iniciar_sesion(email, password):
     if email in usuarios and usuarios[email] == password:
         print("✅ Inicio de sesión exitoso.")
@@ -63,6 +63,11 @@ def logout():
 @login_required
 def secretaria():
     return render_template('secretaria.html')
+# Interfaz de ViceDecanatura
+@main.route('/ViceDecanatura')
+@login_required
+def ViceDecanatura():
+    return render_template('ViceDecanatura.html')
 # Interfaz de curricular
 @main.route('/curricular')
 @login_required
@@ -73,7 +78,26 @@ def curricular():
 @login_required
 def normatividad():
     return render_template('normatividad.html')
+# Interfaz de Bienestar
+@main.route('/Bienestar')
+@login_required
+def Bienestar():
+    return render_template('Bienestar.html')
 
+
+######            ########
+###### Curricular ########
+######            ########
+## Interfaz de pregrado
+@main.route('/curricular/Pregrado')
+@login_required
+def Pregrado():
+    return render_template('Pregrado.html')
+## Interfaz de posgrado
+@main.route('/curricular/posgrado')
+@login_required
+def posgrado():
+    return render_template('posgrado.html')
 ######            ########
 ###### SECRETARIA ########
 ######            ########
@@ -115,5 +139,5 @@ def convenios():
     return render_template('convenios.html')
 
 ######            ########
-###### CURRICULAR ########
+###### ViceDecanatura ########
 ######            ########
