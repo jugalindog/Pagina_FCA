@@ -1,6 +1,7 @@
 from flask import Blueprint, Flask,render_template,request,redirect, url_for, flash
 from flask import session
 from functools import wraps
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 
@@ -10,23 +11,57 @@ main=Blueprint('main',__name__)
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if not session.get("usuario_logueado"):
+        if not session.get("user_email"):
             flash("🔒 Debes iniciar sesión para acceder a esta página.", "warning")
             return redirect(url_for('main.index'))
         return f(*args, **kwargs)
     return decorated_function
 
+# Decorador para verificar roles de usuario
+def role_required(*required_roles):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            # 1. Primero, verificar si el usuario ha iniciado sesión
+            if "user_role" not in session:
+                flash("🔒 Debes iniciar sesión para acceder a esta página.", "warning")
+                return redirect(url_for('main.index'))
+
+            user_role = session.get("user_role")
+
+            # 2. El 'superadmin' tiene acceso a todo
+            if user_role == 'superadmin':
+                return f(*args, **kwargs)
+
+            # 3. Verificar si el rol del usuario está en los roles permitidos
+            if user_role not in required_roles:
+                flash("🚫 No tienes permiso para acceder a esta sección.", "danger")
+                return redirect(url_for('main.UI')) # Redirigir a la página principal
+
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
 
 
-# Inicio de sesión
-usuarios={'autoevaluacion_fcabog@unal.edu.co':'fcaxauto345*',
-        'superadmin':'jorge123'}
+# --- GESTIÓN DE USUARIOS ---
+# Ahora cada usuario tiene un hash y un rol.
+usuarios = {
+    'autoevaluacion_fcabog@unal.edu.co': {'hash': 'pbkdf2:sha256:1000000$dCUKL3yflOeqNCDV$05f59af1a8108731c2f323a2dbf77fe865c4a7d019402a3c5fb3db23959b0635', 'role': 'secretaria'},
+    'superadmin': {'hash': 'pbkdf2:sha256:1000000$WUSW9L7vBdg86REQ$ad49173816833fa1f14e929d2a7299a9cfa1771f5077d7061bb48d432fe4dfdc', 'role': 'superadmin'},
+    'DirecBienestar': {'hash': 'pbkdf2:sha256:1000000$iwVhT0ySuK9Zte2R$e43ff89d01e742d4a64ce1e5c9cb36cd6d221c7472400640f761c5025e457b7e', 'role': 'bienestar'},
+    'DirecCurricular': {'hash': 'pbkdf2:sha256:1000000$lqaOMa5rJvdJ6Bxf$7845f17bcb65e398cb030fac10e248f238fd018e6eef84fab1a84b920397f778', 'role': 'curricular'},
+    'Vicedecanatura': {'hash': 'pbkdf2:sha256:1000000$nuxxmORBPW2lptGv$a3b915a3ab1ae3b3732e73f35b4616072d84deb283ec41f4008d000b49ba46f3', 'role': 'vicedecanatura'},
+    'Decanatura': {'hash': 'pbkdf2:sha256:1000000$Z5D0lyXRksAaAAEM$c22ec029edb1c6f9146b66dad5e6a1bead8e6221af9ed3bb4fb9ada6a8a099f0', 'role': 'decanatura'}
+}
+
 def iniciar_sesion(email, password):
-    if email in usuarios and usuarios[email] == password:
-        print("✅ Inicio de sesión exitoso.")
-        return True
-    print("❌ Usuario o contraseña incorrectos.")
-    return False
+    user_data = usuarios.get(email)
+    if user_data and check_password_hash(user_data['hash'], password):
+        print(f"✅ Inicio de sesión exitoso para {email} con rol {user_data['role']}.")
+        return user_data # Devolvemos toda la info del usuario
+    
+    print(f"❌ Intento de inicio de sesión fallido para {email}.")
+    return None
 
 @main.route("/", methods=["GET", "POST"])
 def index():
@@ -34,8 +69,11 @@ def index():
         email = request.form["email"]
         password = request.form["password"]
 
-        if iniciar_sesion(email, password):
-            session["usuario_logueado"] = True  #Valirar inicio de sesión
+        user_data = iniciar_sesion(email, password)
+        if user_data:
+            session.permanent = True # Usa el tiempo de vida de la sesión definido en app.py
+            session["user_email"] = email  # Guardar email del usuario en la sesión
+            session["user_role"] = user_data['role'] # ¡Guardamos el rol!
             flash("✅ Inicio de sesión exitoso.", "success")
             return redirect(url_for("main.UI"))  # 
         else:
@@ -60,81 +98,81 @@ def logout():
 
 # Interfaz de secretaria
 @main.route('/secretaria')
-@login_required
+@role_required('secretaria')
 def secretaria():
     return render_template('secretaria.html')
 # Interfaz de ViceDecanatura
 @main.route('/ViceDecanatura')
-@login_required
+@role_required('vicedecanatura')
 def ViceDecanatura():
     return render_template('ViceDecanatura.html')
 # Interfaz de curricular
 @main.route('/curricular')
-@login_required
+@role_required('curricular')
 def curricular():
     return render_template('curricular.html')
 # Interfaz de normatividad
 @main.route('/normatividad')
-@login_required
+@role_required('decanatura') # Ejemplo: solo el rol 'decanatura' puede ver esto
 def normatividad():
     return render_template('normatividad.html')
 # Interfaz de Bienestar
 @main.route('/Bienestar')
-@login_required
+@role_required('bienestar')
 def Bienestar():
     return render_template('Bienestar.html')
 
 
 ######            ########
 ###### Curricular ########
-######            ########
+######            ######## (Protegido por el rol 'curricular')
 ## Interfaz de pregrado
 @main.route('/curricular/Pregrado')
-@login_required
+@role_required('curricular')
 def Pregrado():
     return render_template('Pregrado.html')
 ## Interfaz de posgrado
 @main.route('/curricular/posgrado')
-@login_required
+@role_required('curricular')
 def posgrado():
     return render_template('posgrado.html')
 ######            ########
-###### SECRETARIA ########
-######            ########
+###### SECRETARIA ######## (Protegido por el rol 'secretaria')
+######            ######## 
 
 ## 1. Interfaz de admitidos posgrado
 @main.route('/secretaria/admi_pos')
-@login_required
+@role_required('secretaria')
 def admi_pos():
     return render_template('admi_pos.html')
 ## 2. Interfaz de matriculados posgrados
 @main.route('/secretaria/matri_pos')
-@login_required
+@role_required('secretaria')
 def matri_pos():
     return render_template('matri_pos.html')
 ## 3. Interfaz de movilidad saliente estudiantes
 @main.route('/secretaria/movi_sal_est')
-@login_required
+@role_required('secretaria')
 def movi_sal_est():
     return render_template('movi_sal_est.html')
 ## 4. Interfaz de movilidad entrante estudiantes
 @main.route('/secretaria/movi_ent_est')
-@login_required
+@role_required('secretaria')
 def movi_ent_est():
     return render_template('movi_ent_est.html')
 ## 5. Interfaz de movilidad saliente docente
 @main.route('/secretaria/movi_sal_doc')
-@login_required
+@role_required('secretaria')
 def movi_sal_doc():
     return render_template('movi_sal_doc.html')
 ## 6. Interfaz de movilidad entrante docente
 @main.route('/secretaria/movi_ent_doc')
-@login_required
+@role_required('secretaria')
 def movi_ent_doc():
     return render_template('movi_ent_doc.html')
 ## 7. Interfaz de convenios
 @main.route('/secretaria/convenios')
-@login_required
+@role_required('secretaria')
 def convenios():
     return render_template('convenios.html')
 
