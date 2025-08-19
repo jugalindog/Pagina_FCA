@@ -91,9 +91,12 @@
 
   <body>
     <nav class="navbar navbar-dark" style="background-color: #555555;">
-      <a class="navbar-brand" href="{{ url_for('main.UI') }}"
-        >Datos y Estadísticas - FCA UNAL</a
-      >
+      <a class="navbar-brand" href="{{ url_for('main.UI') }}">
+        Datos y Estadísticas - FCA UNAL
+        {% if session.user_email %}
+          <small class="text-white-50 ml-2">| {{ session.user_email }}</small>
+        {% endif %}
+      </a>
       <button
         class="navbar-toggler"
         type="button"
