@@ -127,10 +127,10 @@ def Bienestar():
 ###### Curricular ########
 ######            ######## (Protegido por el rol 'curricular')
 ## Interfaz de pregrado
-@main.route('/curricular/Pregrado')
+@main.route('/curricular/pregrado')
 @role_required('curricular')
-def Pregrado():
-    return render_template('Pregrado.html')
+def pregrado():
+    return render_template('pregrado.html')
 ## Interfaz de posgrado
 @main.route('/curricular/posgrado')
 @role_required('curricular')
