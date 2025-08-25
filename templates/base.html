@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     {% block head %}
     <title>Datos y Estadísticas - FCA UNAL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Favicon y estilos -->
     <link
       rel="shortcut icon"
       type="image/x-icon"
@@ -25,71 +25,29 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="{{ url_for('static', filename='beauty.css') }}">
-
+    
+    <!-- Scripts necesarios -->
     <script
       src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
       integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
       crossorigin="anonymous"
     ></script>
-
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
       integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
       crossorigin="anonymous"
     ></script>
-
     <script
       src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {% endblock %}
   </head>
 
-
-   
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    let timer;
-    const tiempoMaxInactivo = 10 * 60 * 1000; // 15 minutos
-
-    function reiniciarTemporizador() {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        Swal.fire({
-          title: 'Sesión expirada por inactividad',
-          text: 'Serás redirigido al inicio de sesión.',
-          icon: 'warning',
-          confirmButtonText: 'Aceptar',
-          allowOutsideClick: false,
-          allowEscapeKey: false,
-          allowEnterKey: false,
-          didClose: () => {
-            window.location.href = "{{ url_for('main.logout') }}";  // Puedes usar main.index si no deseas cerrar sesión
-          }
-        });
-      }, tiempoMaxInactivo);
-    }
-
-   // Eventos que reinician el temporizador
-   window.onload = reiniciarTemporizador;
-   document.onmousemove = reiniciarTemporizador;
-   document.onkeypress = reiniciarTemporizador;
-   document.onclick = reiniciarTemporizador;
-   document.onscroll = reiniciarTemporizador;
-  </script>
-
-<script>
-  if (performance.navigation.type === 2) {
-    location.reload(true); // recarga desde el servidor (no desde caché)
-  }
-</script>
-
-
-  
-
   <body>
+    <!-- Barra de navegación -->
     <nav class="navbar navbar-dark" style="background-color: #555555;">
       <a class="navbar-brand" href="{{ url_for('main.UI') }}">
         Datos y Estadísticas - FCA UNAL
@@ -132,6 +90,70 @@
         </ul>
       </div>
     </nav>
+    
+    <!-- Contenido principal -->
     {% block content %} {% endblock %}
+
+    <!-- Scripts de la aplicación -->
+    <script>
+    // Configuración del temporizador de sesión
+    const MINUTES = 5;
+    const WARNING_BEFORE = 1; // Minutos antes de expirar para mostrar advertencia
+    const SESSION_TIMEOUT = MINUTES * 60 * 1000;
+    const WARNING_TIMEOUT = (MINUTES - WARNING_BEFORE) * 60 * 1000;
+    let timer;
+    let warningTimer;
+
+    // Función para reiniciar el temporizador de sesión
+    function resetTimer() {
+        clearTimeout(timer);
+        clearTimeout(warningTimer);
+
+        // Configurar advertencia
+        warningTimer = setTimeout(() => {
+            Swal.fire({
+                title: '¡Advertencia!',
+                text: `Tu sesión expirará en ${WARNING_BEFORE} minuto(s)`,
+                icon: 'warning',
+                confirmButtonText: 'Mantener sesión',
+                showCancelButton: true,
+                cancelButtonText: 'Cerrar sesión',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    resetTimer(); // Reiniciar el temporizador si el usuario quiere mantener la sesión
+                } else {
+                    window.location.href = "{{ url_for('main.logout') }}";
+                }
+            });
+        }, WARNING_TIMEOUT);
+
+        // Configurar expiración
+        timer = setTimeout(() => {
+            Swal.fire({
+                title: '¡Sesión Expirada!',
+                text: 'Tu sesión ha expirado por inactividad',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+                allowOutsideClick: false
+            }).then((result) => {
+                window.location.href = "{{ url_for('main.logout') }}";
+            });
+        }, SESSION_TIMEOUT);
+    }
+
+    // Eventos que reinician el temporizador
+    ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
+        document.addEventListener(event, resetTimer);
+    });
+
+    // Iniciar el temporizador
+    resetTimer();
+
+    // Recargar página al volver atrás para evitar problemas de caché
+    if (performance.navigation.type === 2) {
+        location.reload(true);
+    }
+</script>
   </body>
 </html>
