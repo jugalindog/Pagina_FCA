@@ -5,7 +5,7 @@ from main import main as main_blueprint
 def create_app():
     app = Flask(__name__)
     app.secret_key = "FCA2080179"
-    app.permanent_session_lifetime = timedelta(minutes=5)
+    app.permanent_session_lifetime = timedelta(minutes=2)
 
     @app.before_request
     def check_session_timeout():
