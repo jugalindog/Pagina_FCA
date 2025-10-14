@@ -143,6 +143,12 @@ def pregrado():
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def posgrado():
     return render_template('posgrado.html', page_title='Datos Curricular', sub_page_title='Posgrado')
+## Interfaz de Docentes
+@main.route('/curricular/Docentes')
+@role_required('decanatura','vicedecanatura','secretaria','curricular')
+def Docentes():
+    return render_template('Docentes.html', page_title='Datos Curricular', sub_page_title='Docentes')
+
 ######            ########
 ###### SECRETARIA ######## (Protegido por el rol 'secretaria')
 ######            ######## 
