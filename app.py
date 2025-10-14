@@ -5,7 +5,7 @@ from main import main as main_blueprint
 def create_app():
     app = Flask(__name__)
     app.secret_key = "FCA2080179"
-    app.permanent_session_lifetime = timedelta(minutes=2)
+    app.permanent_session_lifetime = timedelta(minutes=15)
 
     @app.before_request
     def check_session_timeout():
@@ -13,7 +13,7 @@ def create_app():
             if 'last_activity' in session:
                 now = datetime.now()
                 last_activity = datetime.fromisoformat(session['last_activity'])
-                if (now - last_activity) > timedelta(minutes=5):
+                if (now - last_activity) > timedelta(minutes=15):
                     session.clear()
                     flash("⌛ Tu sesión ha expirado por inactividad.", "warning")
                     return redirect(url_for('main.index'))

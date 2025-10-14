@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask,render_template,request,redirect, url_for, flash
+from flask import Blueprint, Flask,render_template,request,redirect, url_for, flash, jsonify
 from flask import session
 from functools import wraps
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -46,7 +46,7 @@ def role_required(*required_roles):
 # --- GESTIÓN DE USUARIOS ---
 # Ahora cada usuario tiene un hash y un rol.
 usuarios = {
-    'autoevaluacion_fcabog@unal.edu.co': {'hash': 'pbkdf2:sha256:1000000$dCUKL3yflOeqNCDV$05f59af1a8108731c2f323a2dbf77fe865c4a7d019402a3c5fb3db23959b0635', 'role': 'secretaria'},
+    'autoevaluacion': {'hash': 'pbkdf2:sha256:1000000$dCUKL3yflOeqNCDV$05f59af1a8108731c2f323a2dbf77fe865c4a7d019402a3c5fb3db23959b0635', 'role': 'secretaria'},
     'superadmin': {'hash': 'pbkdf2:sha256:1000000$K0VKCTErirOMxvjq$4d11b15ea1e28b2e1f6cad1ad0151bb97453719ba6482cbf59432148de702ae2', 'role': 'superadmin'},
     'DirecBienestar': {'hash': 'pbkdf2:sha256:1000000$iwVhT0ySuK9Zte2R$e43ff89d01e742d4a64ce1e5c9cb36cd6d221c7472400640f761c5025e457b7e', 'role': 'bienestar'},
     'DirecCurricular': {'hash': 'pbkdf2:sha256:1000000$lqaOMa5rJvdJ6Bxf$7845f17bcb65e398cb030fac10e248f238fd018e6eef84fab1a84b920397f778', 'role': 'curricular'},
@@ -87,6 +87,13 @@ def index():
 def UI():
     return render_template('PrincipalInterface.html')
 
+# Ruta para mantener la sesión activa desde el cliente
+@main.route('/keep-alive')
+@login_required
+def keep_alive():
+    # Al acceder a esta ruta, el decorador @login_required ya está activo
+    # y el @app.before_request de app.py actualizará 'last_activity'.
+    return jsonify(status='session_extended')
 
 #Desconexión
 @main.route('/logout')
@@ -98,29 +105,29 @@ def logout():
 
 # Interfaz de secretaria
 @main.route('/secretaria')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def secretaria():
-    return render_template('secretaria.html')
+    return render_template('secretaria.html', page_title='Datos Secretaría')
 # Interfaz de ViceDecanatura
 @main.route('/ViceDecanatura')
-@role_required('vicedecanatura')
+@role_required('decanatura','vicedecanatura','secretaria')
 def ViceDecanatura():
-    return render_template('ViceDecanatura.html')
+    return render_template('Prac_pro.html', page_title='Datos ViceDecanatura')
 # Interfaz de curricular
 @main.route('/curricular')
-@role_required('curricular')
+@role_required('decanatura','vicedecanatura','secretaria','curricular')
 def curricular():
-    return render_template('curricular.html')
+    return render_template('curricular.html', page_title='Datos Curricular')
 # Interfaz de normatividad
 @main.route('/normatividad')
-@role_required('decanatura') # Ejemplo: solo el rol 'decanatura' puede ver esto
+@role_required('decanatura','vicedecanatura','secretaria') # Ejemplo: solo el rol 'decanatura' puede ver esto
 def normatividad():
-    return render_template('normatividad.html')
+    return render_template('normatividad.html', page_title='Normatividad')
 # Interfaz de Bienestar
 @main.route('/Bienestar')
-@role_required('bienestar')
+@role_required('decanatura','vicedecanatura','secretaria','bienestar')
 def Bienestar():
-    return render_template('Bienestar.html')
+    return render_template('Bienestar.html', page_title='Datos Bienestar')
 
 
 ######            ########
@@ -128,53 +135,53 @@ def Bienestar():
 ######            ######## (Protegido por el rol 'curricular')
 ## Interfaz de pregrado
 @main.route('/curricular/pregrado')
-@role_required('curricular')
+@role_required('decanatura','vicedecanatura','secretaria','curricular')
 def pregrado():
-    return render_template('pregrado.html')
+    return render_template('pregrado.html', page_title='Datos Curricular', sub_page_title='Pregrado')
 ## Interfaz de posgrado
 @main.route('/curricular/posgrado')
-@role_required('curricular')
+@role_required('decanatura','vicedecanatura','secretaria','curricular')
 def posgrado():
-    return render_template('posgrado.html')
+    return render_template('posgrado.html', page_title='Datos Curricular', sub_page_title='Posgrado')
 ######            ########
 ###### SECRETARIA ######## (Protegido por el rol 'secretaria')
 ######            ######## 
 
 ## 1. Interfaz de admitidos posgrado
 @main.route('/secretaria/admi_pos')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def admi_pos():
-    return render_template('admi_pos.html')
+    return render_template('admi_pos.html', page_title='Datos Secretaría', sub_page_title='Admitidos Posgrado')
 ## 2. Interfaz de matriculados posgrados
 @main.route('/secretaria/matri_pos')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def matri_pos():
-    return render_template('matri_pos.html')
+    return render_template('matri_pos.html', page_title='Datos Secretaría', sub_page_title='Matriculados Posgrado')
 ## 3. Interfaz de movilidad saliente estudiantes
 @main.route('/secretaria/movi_sal_est')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def movi_sal_est():
-    return render_template('movi_sal_est.html')
+    return render_template('movi_sal_est.html', page_title='Datos Secretaría', sub_page_title='Movilidad Saliente Estudiantes')
 ## 4. Interfaz de movilidad entrante estudiantes
 @main.route('/secretaria/movi_ent_est')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def movi_ent_est():
-    return render_template('movi_ent_est.html')
+    return render_template('movi_ent_est.html', page_title='Datos Secretaría', sub_page_title='Movilidad Entrante Estudiantes')
 ## 5. Interfaz de movilidad saliente docente
 @main.route('/secretaria/movi_sal_doc')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def movi_sal_doc():
-    return render_template('movi_sal_doc.html')
+    return render_template('movi_sal_doc.html', page_title='Datos Secretaría', sub_page_title='Movilidad Saliente Docente')
 ## 6. Interfaz de movilidad entrante docente
 @main.route('/secretaria/movi_ent_doc')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def movi_ent_doc():
-    return render_template('movi_ent_doc.html')
+    return render_template('movi_ent_doc.html', page_title='Datos Secretaría', sub_page_title='Movilidad Entrante Docente')
 ## 7. Interfaz de convenios
 @main.route('/secretaria/convenios')
-@role_required('secretaria')
+@role_required('decanatura','vicedecanatura','secretaria')
 def convenios():
-    return render_template('convenios.html')
+    return render_template('convenios.html', page_title='Datos Secretaría', sub_page_title='Convenios')
 
 ######            ########
 ###### ViceDecanatura ########

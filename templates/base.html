@@ -51,21 +51,34 @@
     <nav class="navbar navbar-dark" style="background-color: #555555;">
       <a class="navbar-brand" href="{{ url_for('main.UI') }}">
         Datos y Estadísticas - FCA UNAL
+        {% if page_title %}
+          <span class="text-white">| {{ page_title }}</span>
+        {% endif %}
+        {% if sub_page_title %}
+          <span class="text-white">| {{ sub_page_title }}</span>
+        {% endif %}
         {% if session.user_email %}
           <small class="text-white-50 ml-2">| {{ session.user_email }}</small>
         {% endif %}
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      
+      <!-- Contenedor para alinear a la derecha -->
+      <div class="d-flex align-items-center">
+        <!-- Elemento para mostrar el contador de sesión -->
+        <span id="session-timer" class="navbar-text text-white mr-3"></span>
+        <!-- Botón de hamburguesa -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
          <ul class="navbar-nav d-flex flex-row justify-content-between w-100" style="gap: 1rem;padding: 0 5rem;">
@@ -97,17 +110,38 @@
     <!-- Scripts de la aplicación -->
     <script>
     // Configuración del temporizador de sesión
-    const MINUTES = 2;
+    const MINUTES = 15;
     const WARNING_BEFORE = 1; // Minutos antes de expirar para mostrar advertencia
     const SESSION_TIMEOUT = MINUTES * 60 * 1000;
     const WARNING_TIMEOUT = (MINUTES - WARNING_BEFORE) * 60 * 1000;
+
     let timer;
     let warningTimer;
+    let displayInterval;
+    let sessionEndTime;
 
     // Función para reiniciar el temporizador de sesión
     function resetTimer() {
         clearTimeout(timer);
         clearTimeout(warningTimer);
+        clearInterval(displayInterval);
+
+        sessionEndTime = Date.now() + SESSION_TIMEOUT;
+
+        function updateDisplay() {
+            const remaining = sessionEndTime - Date.now();
+            if (remaining <= 0) {
+                document.getElementById('session-timer').textContent = 'Expirando...';
+                clearInterval(displayInterval);
+                return;
+            }
+            const minutes = Math.floor((remaining / 1000) / 60);
+            const seconds = Math.floor((remaining / 1000) % 60);
+            document.getElementById('session-timer').textContent = `Sesión expira en: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        updateDisplay();
+        displayInterval = setInterval(updateDisplay, 1000);
 
         // Configurar advertencia
         warningTimer = setTimeout(() => {
@@ -121,7 +155,12 @@
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
-                    resetTimer(); // Reiniciar el temporizador si el usuario quiere mantener la sesión
+                    // Hacemos una llamada al servidor para que también reinicie su temporizador.
+                    fetch("{{ url_for('main.keep_alive') }}")
+                        .then(response => response.json())
+                        .then(data => {
+                            resetTimer(); // Reiniciar el temporizador del cliente
+                        });
                 } else {
                     window.location.href = "{{ url_for('main.logout') }}";
                 }
