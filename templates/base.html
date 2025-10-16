@@ -98,6 +98,9 @@
             <a href="{{ url_for('main.normatividad') }}" class="btn btn-outline-secondary btn-hover-green text-white">Normatividad</a>
           </li>
           <li class="nav-item">
+            <button id="info-button" type="button" class="btn btn-outline-info text-white">Información</button>
+          </li>
+          <li class="nav-item">
            <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger"> Cerrar sesión</a>
           </li>
         </ul>
@@ -185,6 +188,18 @@
     ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
         document.addEventListener(event, resetTimer);
     });
+
+    const infoButton = document.getElementById('info-button');
+    if (infoButton) {
+        infoButton.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Información',
+                text: 'Si requiere de ayuda con alguna peticione o corrección,  por favor comuníquese al correo  estadisticas_fcabog@unal.edu.co',
+                icon: 'info',
+                confirmButtonText: 'Entendido'
+            });
+        });
+    }
 
     // Iniciar el temporizador
     resetTimer();
