@@ -128,6 +128,11 @@ def normatividad():
 @role_required('decanatura','vicedecanatura','secretaria','bienestar')
 def Bienestar():
     return render_template('Bienestar.html', page_title='Datos Bienestar')
+# Interfaz de Departamento
+@main.route('/Departamento')
+@role_required('decanatura','vicedecanatura','secretaria','bienestar')
+def Departamento():
+    return render_template('Departamento.html', page_title='Datos Departamento')
 
 
 ######            ########
@@ -143,11 +148,7 @@ def pregrado():
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def posgrado():
     return render_template('posgrado.html', page_title='Datos Curricular', sub_page_title='Posgrado')
-## Interfaz de Docentes
-@main.route('/curricular/Docentes')
-@role_required('decanatura','vicedecanatura','secretaria','curricular')
-def Docentes():
-    return render_template('Docentes.html', page_title='Datos Curricular', sub_page_title='Docentes')
+
 
 ######            ########
 ###### SECRETARIA ######## (Protegido por el rol 'secretaria')
@@ -192,3 +193,14 @@ def convenios():
 ######            ########
 ###### ViceDecanatura ########
 ######            ########
+
+
+######            ########
+###### Departamento ########
+######            ########
+
+## Interfaz de Docentes
+@main.route('/Departamento/Docentes')
+@role_required('decanatura','vicedecanatura','secretaria','bienestar')
+def Docentes():
+    return render_template('Docentes.html', page_title='Departamento', sub_page_title='Docentes')
