@@ -1,5 +1,9 @@
-* {
-    font-family: "Arvo", serif;
+@import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&display=swap');
+* 
+  {
+
+   font-family: "Ancizar Sans" !important;
+   font-size: 20px;
   }
 
   .btn-hover-green {
@@ -7,9 +11,15 @@
   border-color: white;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-.btn-hover-green:hover {
-  background-color: #28a745;  /* Verde Bootstrap */
+#btn-hover-green:hover {
+  background-color: #92b745;  /* Verde Bootstrap */
   color: white;
-  border-color: #28a745;
+  border-color: #92b745;
 }
+
+#btn-hover-green {
+    background-color: transparent;
+    border-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: #6c757d;
+  }
