@@ -70,43 +70,54 @@
         <button
           class="navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+          id="menu-toggle"
+          aria-controls="navbarMenu"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
       </div>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-         <ul class="navbar-nav d-flex flex-row justify-content-between w-100" style="gap: 1rem;padding: 0 5rem;">
-          <li class="nav-item">
-            <a href="{{ url_for('main.secretaria') }}" class="btn btn-hover-green text-white" id = "btn-hover-green" >Datos Secretaría</a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url_for('main.ViceDecanatura') }}" class="btn btn-hover-green text-white" id = "btn-hover-green" >Datos ViceDecanatura</a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url_for('main.Bienestar') }}" class="btn btn-hover-green text-white" id = "btn-hover-green">Datos Bienestar</a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url_for('main.curricular') }}" class="btn btn-hover-green text-white" id = "btn-hover-green">Datos Curricular</a>
-          </li>
-          <li class="nav-item">
-            <a href="{{ url_for('main.normatividad') }}" class="btn btn-hover-green text-white" id = "btn-hover-green">Normatividad</a>
-          </li>
-          <li class="nav-item">
-            <button id="info-button" type="button" class="btn btn-outline-info text-white">Información</button>
-          </li>
-          <li class="nav-item">
-           <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger"> Cerrar sesión</a>
-          </li>
-        </ul>
-      </div>
     </nav>
-    
+
+    <div class="navbar-menu" id="navbarMenu" aria-hidden="true">
+      <div class="navbar-menu__header">
+        <h5 class="text-white mb-0">Menú</h5>
+        <button
+          type="button"
+          class="close text-white"
+          aria-label="Cerrar menú"
+          id="menu-close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <ul class="navbar-nav flex-column">
+        <li class="nav-item">
+          <a href="{{ url_for('main.secretaria') }}" class="btn btn-hover-green text-white" id="btn-hover-green">Datos Secretaría</a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url_for('main.ViceDecanatura') }}" class="btn btn-hover-green text-white" id="btn-hover-green">Datos ViceDecanatura</a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url_for('main.Bienestar') }}" class="btn btn-hover-green text-white" id="btn-hover-green">Datos Bienestar</a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url_for('main.curricular') }}" class="btn btn-hover-green text-white" id="btn-hover-green">Datos Curricular</a>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url_for('main.normatividad') }}" class="btn btn-hover-green text-white" id="btn-hover-green">Normatividad</a>
+        </li>
+        <li class="nav-item">
+          <button id="info-button" type="button" class="btn btn-outline-info text-white">Información</button>
+        </li>
+        <li class="nav-item">
+          <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger">Cerrar sesión</a>
+        </li>
+      </ul>
+    </div>
+    <div class="menu-overlay" id="menuOverlay" aria-hidden="true"></div>
+
     <!-- Contenido principal -->
     {% block content %} {% endblock %}
 
@@ -187,6 +198,49 @@
     // Eventos que reinician el temporizador
     ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
         document.addEventListener(event, resetTimer);
+    });
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('navbarMenu');
+    const menuOverlay = document.getElementById('menuOverlay');
+    const menuClose = document.getElementById('menu-close');
+
+    function openMenu() {
+        menu.classList.add('navbar-menu--open');
+        menuOverlay.classList.add('menu-overlay--visible');
+        menu.setAttribute('aria-hidden', 'false');
+        menuToggle.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu() {
+        menu.classList.remove('navbar-menu--open');
+        menuOverlay.classList.remove('menu-overlay--visible');
+        menu.setAttribute('aria-hidden', 'true');
+        menuToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            if (menu.classList.contains('navbar-menu--open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+    }
+
+    if (menuClose) {
+        menuClose.addEventListener('click', closeMenu);
+    }
+
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', closeMenu);
+    }
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menu.classList.contains('navbar-menu--open')) {
+            closeMenu();
+        }
     });
 
     const infoButton = document.getElementById('info-button');
