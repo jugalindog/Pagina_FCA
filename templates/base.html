@@ -70,9 +70,8 @@
         <button
           class="navbar-toggler"
           type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
+          id="menu-toggle"
+          aria-controls="navbar-menu"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
@@ -80,7 +79,7 @@
         </button>
       </div>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div id="navbar-menu" class="navbar-menu">
          <ul class="navbar-nav d-flex flex-row justify-content-between w-100" style="gap: 1rem;padding: 0 5rem;">
           <li class="nav-item">
             <a href="{{ url_for('main.secretaria') }}" class="btn btn-outline-secondary btn-hover-green text-white" style="--bs-btn-hover-bg: #28a745;">Datos Secretaría</a>
@@ -98,11 +97,15 @@
             <a href="{{ url_for('main.normatividad') }}" class="btn btn-outline-secondary btn-hover-green text-white">Normatividad</a>
           </li>
           <li class="nav-item">
+            <button id="info-button" type="button" class="btn btn-outline-info text-white">Información</button>
+          </li>
+          <li class="nav-item">
            <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger"> Cerrar sesión</a>
           </li>
         </ul>
       </div>
     </nav>
+    <div id="menu-overlay" class="menu-overlay"></div>
     
     <!-- Contenido principal -->
     {% block content %} {% endblock %}
@@ -185,6 +188,66 @@
     ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
         document.addEventListener(event, resetTimer);
     });
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const navbarMenu = document.getElementById('navbar-menu');
+    const menuOverlay = document.getElementById('menu-overlay');
+
+    const closeMenu = () => {
+        if (!navbarMenu || !menuOverlay || !menuToggle) {
+            return;
+        }
+        navbarMenu.classList.remove('open');
+        menuOverlay.classList.remove('show');
+        menuToggle.setAttribute('aria-expanded', 'false');
+    };
+
+    const openMenu = () => {
+        if (!navbarMenu || !menuOverlay || !menuToggle) {
+            return;
+        }
+        navbarMenu.classList.add('open');
+        menuOverlay.classList.add('show');
+        menuToggle.setAttribute('aria-expanded', 'true');
+    };
+
+    if (menuToggle && navbarMenu && menuOverlay) {
+        menuToggle.addEventListener('click', () => {
+            if (navbarMenu.classList.contains('open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        menuOverlay.addEventListener('click', closeMenu);
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 992) {
+                closeMenu();
+            }
+        });
+
+        navbarMenu.querySelectorAll('a, button').forEach((element) => {
+            element.addEventListener('click', () => {
+                if (window.innerWidth < 992) {
+                    closeMenu();
+                }
+            });
+        });
+    }
+
+    const infoButton = document.getElementById('info-button');
+    if (infoButton) {
+        infoButton.addEventListener('click', () => {
+            Swal.fire({
+                title: 'Información',
+                html: 'Si requiere de ayuda con alguna petición o corrección, por favor comuníquese al correo <a href="https://mail.google.com/mail/?view=cm&fs=1&to=estadisticas_fcabog@unal.edu.co" target="_blank" rel="noopener noreferrer">estadisticas_fcabog@unal.edu.co</a>.',
+                icon: 'info',
+                confirmButtonText: 'Entendido'
+            });
+        });
+    }
 
     // Iniciar el temporizador
     resetTimer();
