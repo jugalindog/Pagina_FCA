@@ -137,7 +137,7 @@ def Departamento():
 @main.route('/PTA')
 @role_required('decanatura','vicedecanatura','secretaria')
 def PTA():
-    return render_template('PTA.html', page_title='PTA')
+    return render_template('PrincipalInterface.html', page_title='PTA')
 
 
 ######            ########
