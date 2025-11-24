@@ -112,7 +112,7 @@ def secretaria():
 @main.route('/ViceDecanatura')
 @role_required('decanatura','vicedecanatura','secretaria')
 def ViceDecanatura():
-    return render_template('Prac_pro.html', page_title='ViceDecanatura')
+    return render_template('Prac_pro.html', page_title='Vicedecanatura')
 # Interfaz de curricular
 @main.route('/curricular')
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
@@ -138,6 +138,12 @@ def Departamento():
 @role_required('decanatura','vicedecanatura','secretaria')
 def PTA():
     return render_template('PrincipalInterface.html', page_title='PTA')
+
+# Interfaz de CIER
+@main.route('/CIER')
+@role_required('decanatura','vicedecanatura','secretaria')
+def CIER():
+    return render_template('cier.html', page_title='CIER')
 
 
 ######            ########

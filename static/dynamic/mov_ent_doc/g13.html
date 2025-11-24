@@ -928,12 +928,20 @@ flex: 0 0 auto;
 <style type="text/css">.dt-crosstalk-fade {
 opacity: 0.2;
 }
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+  top: 12px;
+  left: 4px;
+}
 html body div.DTS div.dataTables_scrollBody {
 background: none;
 }
 
 table.dataTable {
 display: table;
+}
+
+.dataTables_wrapper {
+  width: 100%;
 }
 
 .html-fill-container > .html-fill-item.datatables {
@@ -1289,6 +1297,7 @@ HTMLWidgets.widget({
     var colReorderEnabled = function() { return "colReorder" in options; };
     var table = $table.DataTable(options);
     $el.data('datatable', table);
+    new $.fn.dataTable.Responsive(table);
 
     if ('rowGroup' in options) {
       // Maintain RowGroup dataSrc when columns are reordered (#1109)
