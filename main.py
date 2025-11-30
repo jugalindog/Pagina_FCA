@@ -139,12 +139,29 @@ def Departamento():
 def PTA():
     return render_template('PrincipalInterface.html', page_title='PTA')
 
+######            ########
+###### Curricular ########
+######            ######## (Protegido por el rol 'vicedecanatura')
 # Interfaz de CIER
 @main.route('/CIER')
 @role_required('decanatura','vicedecanatura','secretaria')
 def CIER():
     return render_template('cier.html', page_title='CIER')
-
+# Interfaz de Ccfinanciacion
+@main.route('/CIER/Cofinanciacion_CIER')
+@role_required('decanatura','vicedecanatura','secretaria')
+def cofinanciacion_cier():
+    return render_template('Cofinanciacion_CIER.html', page_title='CIER', sub_page_title='Cofinanciacion_CIER')
+# Interfaz de proyectos investigacion
+@main.route('/CIER/Proy_Investi_exten')
+@role_required('decanatura','vicedecanatura','secretaria')
+def Proy_Investi_exten():
+    return render_template('Proy_Investi_exten.html', page_title='CIER', sub_page_title='Proy_Investi_exten')
+# Interfaz de Movilidades convocatoria interna
+@main.route('/CIER/Movi_convo_int_CIER')
+@role_required('decanatura','vicedecanatura','secretaria')
+def Movi_convo_int_CIER():
+    return render_template('Movi_convo_int_CIER.html', page_title='CIER', sub_page_title='Movi_convo_int_CIER')
 
 ######            ########
 ###### Curricular ########

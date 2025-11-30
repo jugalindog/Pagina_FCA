@@ -68,10 +68,14 @@
 
 {% block content %}
   <div class="image-grid">
-    <a href="#"><img src="{{ url_for('static', filename='images/image2.png') }}" alt="Subsección 1">
-    <h5>  Subsección CIER 1  </h5> </a>
-    <a href="#"><img src="{{ url_for('static', filename='images/image4.png') }}" alt="Subsección 2">
-    <h5>  Subsección CIER 2  </h5> </a>
-    <!-- Puedes añadir más enlaces e imágenes aquí siguiendo el mismo formato -->
+    <a href="{{ url_for('main.cofinanciacion_cier') }}">
+      <img src="{{ url_for('static', filename='images/image2.png') }}" alt="Cofinanciacion_CIER">
+    <h5>  Cofinanciación </h5> </a>
+    <a href="{{ url_for('main.Proy_Investi_exten') }}">
+      <img src="{{ url_for('static', filename='images/image4.png') }}" alt="Proy_Investi_exten">
+    <h5>  Proyectos investigación extensión </h5> </a>
+    <a href="{{ url_for('main.Movi_convo_int_CIER') }}">
+      <img src="{{ url_for('static', filename='images/image5.png') }}" alt="Movi_convo_int_CIER">
+    <h5>  Movilidades convocatoria interna </h5> </a>
   </div>
 {% endblock %}
