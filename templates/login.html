@@ -1,6 +1,7 @@
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='extended_beauty.css') }}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
 
     
@@ -133,9 +134,38 @@
       </div>
     
       <button type="submit">Ingresar</button>
-    
+
+        <!-- Botón de Información -->
       <div id="messages"></div>
+      <div style="margin-top: 20px;">
+    <button id="info-button" type="button" class="btn btn-info">Información</button>
+  </div>
     </form>
     
   </div>
+
+
+  
 </div>
+
+<script>
+  // Lógica para el botón de información
+  const infoButton = document.getElementById('info-button');
+  if (infoButton) {
+    infoButton.style.backgroundColor = '#0055a5';
+    infoButton.style.color = 'white';
+    infoButton.style.border = '1px solid #003f7f';
+      infoButton.addEventListener('click', () => {
+          Swal.fire({
+              title: 'Información',
+              html: 'Si tiene problemas de acceso por favor comuníquese al correo haciendo click en el siguiente enlace:  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=estadisticas_fcabog@unal.edu.co" target="_blank" rel="noopener noreferrer">estadisticas_fcabog@unal.edu.co</a>.',
+              icon: 'info',
+              confirmButtonText: 'Entendido',
+              confirmButtonColor: '#4CAF50',   // Color del botón (verde ejemplo)
+              background: '#ffffff',           // Color de fondo del modal
+               color: '#333333'                 // Color del texto del título y html
+
+          });
+      });
+  }
+</script>
