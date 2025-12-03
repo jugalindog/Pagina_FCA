@@ -41,10 +41,13 @@
 {% block content %}
   <div class="image-grid">
     <a href="{{ url_for('main.pregrado') }}">
-      <img src="{{ url_for('static', filename='images/pregrado.png') }}" alt="Pregrado">
+      <img src="{{ url_for('static', filename='images/pregrado.png') }}" alt="egresados">
     </a>
     <a href="{{ url_for('main.posgrado') }}">
       <img src="{{ url_for('static', filename='images/posgrado.png') }}" alt="Posgrado">
+    </a>
+        <a href="{{ url_for('main.egresados') }}">
+      <img src="{{ url_for('static', filename='images/egresados.png') }}" alt="egresados">
     </a>
   </div>
 {% endblock %}

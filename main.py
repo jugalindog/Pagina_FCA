@@ -140,7 +140,7 @@ def PTA():
     return render_template('PrincipalInterface.html', page_title='PTA')
 
 ######            ########
-###### Curricular ########
+###### CIER ########
 ######            ######## (Protegido por el rol 'vicedecanatura')
 # Interfaz de CIER
 @main.route('/CIER')
@@ -176,6 +176,11 @@ def pregrado():
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def posgrado():
     return render_template('posgrado.html', page_title='Curricular', sub_page_title='Posgrado')
+## Interfaz de egresados
+@main.route('/curricular/egresados')
+@role_required('decanatura','vicedecanatura','secretaria','curricular')
+def egresados():
+    return render_template('egresados.html', page_title='Curricular', sub_page_title='egresado')
 
 
 ######            ########
