@@ -51,7 +51,8 @@ usuarios = {
     'DirecBienestar': {'hash': 'pbkdf2:sha256:1000000$iwVhT0ySuK9Zte2R$e43ff89d01e742d4a64ce1e5c9cb36cd6d221c7472400640f761c5025e457b7e', 'role': 'bienestar'},
     'DirecCurricular': {'hash': 'pbkdf2:sha256:1000000$lqaOMa5rJvdJ6Bxf$7845f17bcb65e398cb030fac10e248f238fd018e6eef84fab1a84b920397f778', 'role': 'curricular'},
     'Vicedecanatura': {'hash': 'pbkdf2:sha256:1000000$nuxxmORBPW2lptGv$a3b915a3ab1ae3b3732e73f35b4616072d84deb283ec41f4008d000b49ba46f3', 'role': 'vicedecanatura'},
-    'Decanatura': {'hash': 'pbkdf2:sha256:1000000$Z5D0lyXRksAaAAEM$c22ec029edb1c6f9146b66dad5e6a1bead8e6221af9ed3bb4fb9ada6a8a099f0', 'role': 'decanatura'}
+    'Decanatura': {'hash': 'pbkdf2:sha256:1000000$Z5D0lyXRksAaAAEM$c22ec029edb1c6f9146b66dad5e6a1bead8e6221af9ed3bb4fb9ada6a8a099f0', 'role': 'decanatura'},
+    'Prueba': {'hash': 'pbkdf2:sha256:1000000$swn3C1xFs25AcBOA$1655059018d9868c091a219b1acb375e1ec7e255d52a67909675b44b1591a046', 'role': 'decanatura'}
 }
 
 def iniciar_sesion(email, password):
