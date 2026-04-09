@@ -107,17 +107,17 @@ def logout():
 @main.route('/secretaria')
 @role_required('decanatura','vicedecanatura','secretaria')
 def secretaria():
-    return render_template('secretaria.html', page_title='Datos Secretaría')
+    return render_template('secretaria.html', page_title='Secretaría')
 # Interfaz de ViceDecanatura
 @main.route('/ViceDecanatura')
 @role_required('decanatura','vicedecanatura','secretaria')
 def ViceDecanatura():
-    return render_template('Prac_pro.html', page_title='Datos ViceDecanatura')
+    return render_template('Prac_pro.html', page_title='Vicedecanatura')
 # Interfaz de curricular
 @main.route('/curricular')
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def curricular():
-    return render_template('curricular.html', page_title='Datos Curricular')
+    return render_template('curricular.html', page_title='Curricular')
 # Interfaz de normatividad
 @main.route('/normatividad')
 @role_required('decanatura','vicedecanatura','secretaria') # Ejemplo: solo el rol 'decanatura' puede ver esto
@@ -127,8 +127,41 @@ def normatividad():
 @main.route('/Bienestar')
 @role_required('decanatura','vicedecanatura','secretaria','bienestar')
 def Bienestar():
-    return render_template('Bienestar.html', page_title='Datos Bienestar')
+    return render_template('Bienestar.html', page_title='Bienestar')
+# Interfaz de Departamento
+@main.route('/Departamento')
+@role_required('decanatura','vicedecanatura','secretaria','bienestar')
+def Departamento():
+    return render_template('Departamento.html', page_title='Departamento')
+# Interfaz de PTA
+@main.route('/PTA')
+@role_required('decanatura','vicedecanatura','secretaria')
+def PTA():
+    return render_template('PrincipalInterface.html', page_title='PTA')
 
+######            ########
+###### CIER ########
+######            ######## (Protegido por el rol 'vicedecanatura')
+# Interfaz de CIER
+@main.route('/CIER')
+@role_required('decanatura','vicedecanatura','secretaria')
+def CIER():
+    return render_template('cier.html', page_title='CIER')
+# Interfaz de Ccfinanciacion
+@main.route('/CIER/Cofinanciacion_CIER')
+@role_required('decanatura','vicedecanatura','secretaria')
+def cofinanciacion_cier():
+    return render_template('Cofinanciacion_CIER.html', page_title='CIER', sub_page_title='Cofinanciacion_CIER')
+# Interfaz de proyectos investigacion
+@main.route('/CIER/Proy_Investi_exten')
+@role_required('decanatura','vicedecanatura','secretaria')
+def Proy_Investi_exten():
+    return render_template('Proy_Investi_exten.html', page_title='CIER', sub_page_title='Proy_Investi_exten')
+# Interfaz de Movilidades convocatoria interna
+@main.route('/CIER/Movi_convo_int_CIER')
+@role_required('decanatura','vicedecanatura','secretaria')
+def Movi_convo_int_CIER():
+    return render_template('Movi_convo_int_CIER.html', page_title='CIER', sub_page_title='Movi_convo_int_CIER')
 
 ######            ########
 ###### Curricular ########
@@ -137,12 +170,19 @@ def Bienestar():
 @main.route('/curricular/pregrado')
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def pregrado():
-    return render_template('pregrado.html', page_title='Datos Curricular', sub_page_title='Pregrado')
+    return render_template('pregrado.html', page_title='Curricular', sub_page_title='Pregrado')
 ## Interfaz de posgrado
 @main.route('/curricular/posgrado')
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def posgrado():
-    return render_template('posgrado.html', page_title='Datos Curricular', sub_page_title='Posgrado')
+    return render_template('posgrado.html', page_title='Curricular', sub_page_title='Posgrado')
+## Interfaz de egresados
+@main.route('/curricular/egresados')
+@role_required('decanatura','vicedecanatura','secretaria','curricular')
+def egresados():
+    return render_template('egresados.html', page_title='Curricular', sub_page_title='egresado')
+
+
 ######            ########
 ###### SECRETARIA ######## (Protegido por el rol 'secretaria')
 ######            ######## 
@@ -151,38 +191,54 @@ def posgrado():
 @main.route('/secretaria/admi_pos')
 @role_required('decanatura','vicedecanatura','secretaria')
 def admi_pos():
-    return render_template('admi_pos.html', page_title='Datos Secretaría', sub_page_title='Admitidos Posgrado')
+    return render_template('admi_pos.html', page_title='Secretaría', sub_page_title='Admitidos Posgrado')
 ## 2. Interfaz de matriculados posgrados
 @main.route('/secretaria/matri_pos')
 @role_required('decanatura','vicedecanatura','secretaria')
 def matri_pos():
-    return render_template('matri_pos.html', page_title='Datos Secretaría', sub_page_title='Matriculados Posgrado')
+    return render_template('matri_pos.html', page_title='Secretaría', sub_page_title='Matriculados Posgrado')
 ## 3. Interfaz de movilidad saliente estudiantes
 @main.route('/secretaria/movi_sal_est')
 @role_required('decanatura','vicedecanatura','secretaria')
 def movi_sal_est():
-    return render_template('movi_sal_est.html', page_title='Datos Secretaría', sub_page_title='Movilidad Saliente Estudiantes')
+    return render_template('movi_sal_est.html', page_title='Secretaría', sub_page_title='Movilidad Saliente Estudiantes')
 ## 4. Interfaz de movilidad entrante estudiantes
 @main.route('/secretaria/movi_ent_est')
 @role_required('decanatura','vicedecanatura','secretaria')
 def movi_ent_est():
-    return render_template('movi_ent_est.html', page_title='Datos Secretaría', sub_page_title='Movilidad Entrante Estudiantes')
+    return render_template('movi_ent_est.html', page_title='Secretaría', sub_page_title='Movilidad Entrante Estudiantes')
 ## 5. Interfaz de movilidad saliente docente
 @main.route('/secretaria/movi_sal_doc')
 @role_required('decanatura','vicedecanatura','secretaria')
 def movi_sal_doc():
-    return render_template('movi_sal_doc.html', page_title='Datos Secretaría', sub_page_title='Movilidad Saliente Docente')
+    return render_template('movi_sal_doc.html', page_title='Secretaría', sub_page_title='Movilidad Saliente Docente')
 ## 6. Interfaz de movilidad entrante docente
 @main.route('/secretaria/movi_ent_doc')
 @role_required('decanatura','vicedecanatura','secretaria')
 def movi_ent_doc():
-    return render_template('movi_ent_doc.html', page_title='Datos Secretaría', sub_page_title='Movilidad Entrante Docente')
+    return render_template('movi_ent_doc.html', page_title='Secretaría', sub_page_title='Movilidad Entrante Docente')
 ## 7. Interfaz de convenios
 @main.route('/secretaria/convenios')
 @role_required('decanatura','vicedecanatura','secretaria')
 def convenios():
-    return render_template('convenios.html', page_title='Datos Secretaría', sub_page_title='Convenios')
+    return render_template('convenios.html', page_title='Secretaría', sub_page_title='Convenios')
 
 ######            ########
 ###### ViceDecanatura ########
 ######            ########
+
+
+######            ########
+###### Departamento ########
+######            ########
+
+## Interfaz de Docentes
+@main.route('/Departamento/Docentes')
+@role_required('decanatura','vicedecanatura','secretaria','bienestar')
+def Docentes():
+    return render_template('Docentes.html', page_title='Departamento', sub_page_title='Docentes')
+
+
+######            ########
+###### PTA  ######## (Protegido por el rol 'secretaria')
+######            ######## 

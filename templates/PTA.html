@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='extended_beauty.css') }}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+
+{% block content %}
+  <iframe title="AOC_Amarilo" 
+    src="https://app.powerbi.com/view?r=eyJrIjoiNDEzOGRjM2MtNDY4Zi00MWFjLTkyODQtNGE1ZjhjYTg5Yjg5IiwidCI6IjU3N2ZjMWQ4LTA5MjItNDU4ZS04N2JmLWVjNGY0NTVlYjYwMCIsImMiOjR9"
+    frameborder="0" allowfullscreen="true"
+    style="width: 100%; height: calc(100vh - 56px); border: none; display: block; margin: 0; padding: 0;">
+  </iframe>
+{% endblock %}
