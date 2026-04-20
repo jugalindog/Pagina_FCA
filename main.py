@@ -47,11 +47,12 @@ def role_required(*required_roles):
 # Ahora cada usuario tiene un hash y un rol.
 usuarios = {
     'autoevaluacion': {'hash': 'pbkdf2:sha256:1000000$dCUKL3yflOeqNCDV$05f59af1a8108731c2f323a2dbf77fe865c4a7d019402a3c5fb3db23959b0635', 'role': 'secretaria'},
-    'superadmin': {'hash': 'pbkdf2:sha256:1000000$K0VKCTErirOMxvjq$4d11b15ea1e28b2e1f6cad1ad0151bb97453719ba6482cbf59432148de702ae2', 'role': 'superadmin'},
+    'superadmin':     {'hash': 'pbkdf2:sha256:1000000$K0VKCTErirOMxvjq$4d11b15ea1e28b2e1f6cad1ad0151bb97453719ba6482cbf59432148de702ae2', 'role': 'superadmin'},
     'DirecBienestar': {'hash': 'pbkdf2:sha256:1000000$iwVhT0ySuK9Zte2R$e43ff89d01e742d4a64ce1e5c9cb36cd6d221c7472400640f761c5025e457b7e', 'role': 'bienestar'},
-    'DirecCurricular': {'hash': 'pbkdf2:sha256:1000000$lqaOMa5rJvdJ6Bxf$7845f17bcb65e398cb030fac10e248f238fd018e6eef84fab1a84b920397f778', 'role': 'curricular'},
+    'DirecCurricular':{'hash': 'pbkdf2:sha256:1000000$lqaOMa5rJvdJ6Bxf$7845f17bcb65e398cb030fac10e248f238fd018e6eef84fab1a84b920397f778', 'role': 'curricular'},
     'Vicedecanatura': {'hash': 'pbkdf2:sha256:1000000$nuxxmORBPW2lptGv$a3b915a3ab1ae3b3732e73f35b4616072d84deb283ec41f4008d000b49ba46f3', 'role': 'vicedecanatura'},
-    'Decanatura': {'hash': 'pbkdf2:sha256:1000000$Z5D0lyXRksAaAAEM$c22ec029edb1c6f9146b66dad5e6a1bead8e6221af9ed3bb4fb9ada6a8a099f0', 'role': 'decanatura'}
+    'Decanatura':     {'hash': 'pbkdf2:sha256:1000000$Z5D0lyXRksAaAAEM$c22ec029edb1c6f9146b66dad5e6a1bead8e6221af9ed3bb4fb9ada6a8a099f0', 'role': 'decanatura'},
+    'Calidad':        {'hash': 'pbkdf2:sha256:1000000$w4mGWYGZjg9gYdoe$0ebf5a2e0a23d49dbc215494506d2143378267a194414b780a8687a45576a5d8', 'role': 'decanatura'},  
 }
 
 def iniciar_sesion(email, password):
@@ -181,6 +182,7 @@ def posgrado():
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def egresados():
     return render_template('egresados.html', page_title='Curricular', sub_page_title='egresado')
+    return render_template('egresados.html', page_title='Curricular', sub_page_title='Egresados')
 
 
 ######            ########
