@@ -1,14 +1,65 @@
 {% extends "base.html" %}
+
 {% block head %}
   {{ super() }}
   <link rel="stylesheet" href="{{ url_for('static', filename='extended_beauty.css') }}" />
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
-    /* General body styling */
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
     }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      padding: 40px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .image-grid a {
+      display: block;
+      text-decoration: none;
+    }
+
+    .image-grid img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .image-grid img:hover {
+      transform: scale(1.05);
+    }
+        .image-grid h5 {
+      margin-top: 12px;
+      font-size: 1.65rem;
+      font-weight: bold;
+      color: #333;
+      text-align: center;
+      transition: color 0.3s ease;
+    }
   </style>
+{% endblock %}
+
+{% block content %}
+  <div class="image-grid">
+    <a href="{{ url_for('main.egresados_MG') }}">
+      <img src="{{ url_for('static', filename='images/Egresados_MG.png') }}" alt="Egresados Maestria Geomatica">
+    </a>
+    <a href="{{ url_for('main.Prac_pro') }}">
+      <img src="{{ url_for('static', filename='images/Practica_profe.png') }}" alt="Práctica Profesional">
+   
+    </a>
+    <a href="{{ url_for('main.egresados_DCA') }}">
+      <img src="{{ url_for('static', filename='images/Egresados_DCA.png') }}" alt="Egresados Doctorado en ciencias Agrarias">
+    </a>
+    <a href="{{ url_for('main.egresados_MCA') }}">
+      <img src="{{ url_for('static', filename='images/Egresados_MCA.png') }}" alt="Egresados Maestria en ciencias Agrarias">
+    </a>
+  </div>
 {% endblock %}

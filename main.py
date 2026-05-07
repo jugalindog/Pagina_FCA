@@ -34,7 +34,7 @@ def role_required(*required_roles):
                 return f(*args, **kwargs)
 
             # 3. Verificar si el rol del usuario está en los roles permitidos
-            if user_role not in required_roles:
+            if user_role not in required_roles: 
                 flash("🚫 No tienes permiso para acceder a esta sección.", "danger")
                 return redirect(url_for('main.UI')) # Redirigir a la página principal
 
@@ -113,7 +113,7 @@ def secretaria():
 @main.route('/ViceDecanatura')
 @role_required('decanatura','vicedecanatura','secretaria')
 def ViceDecanatura():
-    return render_template('Prac_pro.html', page_title='Vicedecanatura')
+    return render_template('ViceDecanatura.html', page_title='Vicedecanatura')
 # Interfaz de curricular
 @main.route('/curricular')
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
@@ -138,7 +138,7 @@ def Departamento():
 @main.route('/PTA')
 @role_required('decanatura','vicedecanatura','secretaria')
 def PTA():
-    return render_template('PrincipalInterface.html', page_title='PTA')
+    return render_template('PTA.html', page_title='PTA')
 
 ######            ########
 ###### CIER ########
@@ -181,7 +181,6 @@ def posgrado():
 @main.route('/curricular/egresados')
 @role_required('decanatura','vicedecanatura','secretaria','curricular')
 def egresados():
-    return render_template('egresados.html', page_title='Curricular', sub_page_title='egresado')
     return render_template('egresados.html', page_title='Curricular', sub_page_title='Egresados')
 
 
@@ -228,7 +227,25 @@ def convenios():
 ######            ########
 ###### ViceDecanatura ########
 ######            ########
+@main.route('/ViceDecanatura/egresados_MG')
+@role_required('decanatura','vicedecanatura')
+def egresados_MG():
+    return render_template('egresados_MG.html', page_title='ViceDecanatura', sub_page_title='Egresados Maestría Geomatica')
 
+@main.route('/ViceDecanatura/Prac_pro')
+@role_required('decanatura','vicedecanatura')
+def Prac_pro():
+    return render_template('Prac_pro.html', page_title='ViceDecanatura', sub_page_title='Práctica Profesional')
+
+@main.route('/ViceDecanatura/egresados_DCA')
+@role_required('decanatura','vicedecanatura')
+def egresados_DCA(): # Renombrado para evitar conflicto
+    return render_template('egresados_DCA.html', page_title='ViceDecanatura', sub_page_title='Egresados Doctorado en Ciencias Agrarias')
+
+@main.route('/ViceDecanatura/egresados_MCA') # Nueva ruta para evitar duplicidad
+@role_required('decanatura','vicedecanatura')
+def egresados_MCA(): # Renombrado para evitar conflicto
+    return render_template('egresados_MCA.html', page_title='ViceDecanatura', sub_page_title='Egresados Maestría en Ciencias Agrarias')
 
 ######            ########
 ###### Departamento ########
