@@ -169,17 +169,17 @@ def Movi_convo_int_CIER():
 ######            ######## (Protegido por el rol 'curricular')
 ## Interfaz de pregrado
 @main.route('/curricular/pregrado')
-@role_required('decanatura','vicedecanatura','secretaria','curricular')
+@role_required('decanatura','vicedecanatura','curricular')
 def pregrado():
     return render_template('pregrado.html', page_title='Curricular', sub_page_title='Pregrado')
 ## Interfaz de posgrado
 @main.route('/curricular/posgrado')
-@role_required('decanatura','vicedecanatura','secretaria','curricular')
+@role_required('decanatura','vicedecanatura','curricular')
 def posgrado():
     return render_template('posgrado.html', page_title='Curricular', sub_page_title='Posgrado')
 ## Interfaz de egresados
 @main.route('/curricular/egresados')
-@role_required('decanatura','vicedecanatura','secretaria','curricular')
+@role_required('decanatura','vicedecanatura','curricular')
 def egresados():
     return render_template('egresados.html', page_title='Curricular', sub_page_title='Egresados')
 

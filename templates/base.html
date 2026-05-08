@@ -57,9 +57,6 @@
         {% if sub_page_title %}
           <span class="text-white">| {{ sub_page_title }}</span>
         {% endif %}
-        {% if session.user_email %}
-          <small class="text-white-50 ml-2">| {{ session.user_email }}</small>
-        {% endif %}
       </a>
       
       <!-- Contenedor para alinear a la derecha -->
@@ -93,6 +90,9 @@
         </button>
       </div>
       <ul class="navbar-nav flex-column">
+        {% if session.user_email %}
+          <small class="text-white-50 ml-2"><h5 class="text-white mb-0">| {{ session.user_email }}</h5></small>
+        {% endif %}
         <li class="nav-item">
           <a href="{{ url_for('main.secretaria') }}" class="btn btn-hover-green text-white" id="btn-hover-green">Secretaría</a>
         </li>
